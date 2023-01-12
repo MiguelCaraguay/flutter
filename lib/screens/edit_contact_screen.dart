@@ -11,6 +11,7 @@ class AddEditContactPage extends StatefulWidget {
     Key? key,
     this.contact,
   }) : super(key: key);
+
   @override
   _AddEditContactPageState createState() => _AddEditContactPageState();
 }
@@ -19,7 +20,8 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
   final _formKey = GlobalKey<FormState>();
   late String nombre;
   late String apellido;
-  late String parentesco;
+  late String? parentesco;
+  late String direccion;
   late String correo;
   late String telefono;
 
@@ -27,11 +29,12 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
   void initState() {
     super.initState();
 
-    nombre = widget.contact?.nombre ?? 'M';
-    apellido = widget.contact?.apellido ?? 'A';
-    parentesco = widget.contact?.parentesco ?? 'P';
-    correo = widget.contact?.correo ?? 'C';
-    telefono = widget.contact?.telefono ?? 'T';
+    nombre = widget.contact?.nombre ?? '';
+    apellido = widget.contact?.apellido ?? '';
+    parentesco = widget.contact?.parentesco ?? '';
+    direccion = widget.contact?.direccion ?? '';
+    correo = widget.contact?.correo ?? '';
+    telefono = widget.contact?.telefono ?? '';
   }
 
   @override
@@ -47,13 +50,16 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
               nombre: nombre,
               apellido: apellido,
               parentesco: parentesco,
+              direccion: direccion,
               correo: correo,
               telefono: telefono,
               onChangedNombre: (nombre) => setState(() => this.nombre = nombre),
               onChangedApellido: (apellido) =>
                   setState(() => this.apellido = apellido),
               onChangedParentesco: (parentesco) =>
-                  setState(() => this.correo = parentesco),
+                  setState(() => this.parentesco = parentesco),
+              onChangedDireccion: (direccion) =>
+                  setState(() => this.direccion = direccion),
               onChangedCorreo: (correo) => setState(() => this.correo = correo),
               onChangedTelefono: (telefono) =>
                   setState(() => this.telefono = telefono),
@@ -66,7 +72,7 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
   Widget buildButton() {
     final isFormValid = nombre.isNotEmpty &&
         apellido.isNotEmpty &&
-        parentesco.isNotEmpty &&
+        direccion.isNotEmpty &&
         correo.isNotEmpty &&
         telefono.isNotEmpty;
     return Padding(
@@ -88,7 +94,6 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
 
     if (isValid) {
       final isUpdating = widget.contact != null;
-      print('valido');
       if (isUpdating) {
         await updateContact();
       } else {
@@ -104,6 +109,7 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
       nombre: nombre,
       apellido: apellido,
       parentesco: parentesco,
+      direccion: direccion,
       correo: correo,
       telefono: telefono,
     );
@@ -114,14 +120,12 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
     final contact = Contact(
       nombre: nombre,
       apellido: apellido,
-      parentesco: parentesco,
+      parentesco: parentesco ?? '',
+      direccion: direccion,
       correo: correo,
       telefono: telefono,
     );
-    print(contact.telefono);
-    print(contact.nombre);
-    print(contact.apellido);
-    print(contact.parentesco);
+
     await ContactsDatabase.instance.create(contact);
   }
 }

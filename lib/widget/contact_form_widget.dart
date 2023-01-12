@@ -7,11 +7,13 @@ class ContactFormWidget extends StatelessWidget {
   final String? nombre;
   final String? apellido;
   final String? parentesco;
+  final String? direccion;
   final String? correo;
   final String? telefono;
   final ValueChanged<String> onChangedNombre;
   final ValueChanged<String> onChangedApellido;
-  final ValueChanged<String> onChangedParentesco;
+  final ValueChanged<String?>? onChangedParentesco;
+  final ValueChanged<String> onChangedDireccion;
   final ValueChanged<String> onChangedCorreo;
   final ValueChanged<String> onChangedTelefono;
 
@@ -20,12 +22,13 @@ class ContactFormWidget extends StatelessWidget {
     this.nombre = '',
     this.apellido = '',
     this.parentesco = '',
+    this.direccion = '',
     this.correo = '',
     this.telefono = '',
-
     required this.onChangedNombre,
     required this.onChangedApellido,
     required this.onChangedParentesco,
+    required this.onChangedDireccion,
     required this.onChangedCorreo,
     required this.onChangedTelefono,
   }) : super(key: key);
@@ -42,6 +45,8 @@ class ContactFormWidget extends StatelessWidget {
               buildApellido(),
               SizedBox(height: 3),
               buildParentesco(),
+              SizedBox(height: 3),
+              buildDireccion(),
               SizedBox(height: 3),
               buildCorreo(),
               SizedBox(height: 3),
@@ -80,17 +85,35 @@ class ContactFormWidget extends StatelessWidget {
         onChanged: onChangedApellido,
       );
 
-  Widget buildParentesco() => TextFormField(
-        initialValue: parentesco,
+  Widget buildParentesco() => Container(
+        width: 400,
+        child: DropdownButtonFormField<String>(
+          decoration: InputDecoration(
+            prefixIcon: Icon(Icons.people),
+          ),
+          hint: Text("${parentesco}"),
+          items: <String>['Familiar', 'Amigo', 'Conocido'].map((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: new Text(value),
+            );
+          }).toList(),
+          onChanged: onChangedParentesco,
+        ),
+      );
+
+
+  Widget buildDireccion() => TextFormField(
+        initialValue: direccion,
         decoration: InputDecoration(
-          icon: Icon(Icons.people),
-          hintText: 'Parentesco',
+          icon: Icon(Icons.house),
+          hintText: 'Direccion',
           hintStyle: TextStyle(color: Colors.black),
         ),
         validator: (title) => title != null && title.isEmpty
-            ? 'El parentesco no puede estar vacío'
+            ? 'La Direccion no puede estar vacía'
             : null,
-        onChanged: onChangedParentesco,
+        onChanged: onChangedDireccion,
       );
 
   Widget buildCorreo() => TextFormField(

@@ -34,6 +34,7 @@ class ContactsDatabase {
       ${ContactFields.nombre} $textType,
       ${ContactFields.apellido} $textType,
       ${ContactFields.parentesco} $textType,
+      ${ContactFields.direccion} $textType,
       ${ContactFields.correo} $textType,
       ${ContactFields.telefono} $textType
       )

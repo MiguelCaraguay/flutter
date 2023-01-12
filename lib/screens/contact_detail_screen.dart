@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import '../db/contacts_database.dart';
 import '../model/contact.dart';
 
-
 class ContactDetailPage extends StatefulWidget {
   final int noteId;
 
@@ -39,64 +38,98 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      actions: [editButton(), deleteButton()],
-      // actions: [deleteButton()],
-    ),
-    body: isLoading
-        ? Center(child: CircularProgressIndicator())
-        : Padding(
-      padding: EdgeInsets.all(12),
-      child: ListView(
-        padding: EdgeInsets.symmetric(vertical: 8),
-        children: [
-          Text(
-            contacts.nombre,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 8),
-          Text(
-            contacts.apellido,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Text(
-            contacts.parentesco,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 8),
-          Text(
-            contacts.correo,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Text(
-            contacts.telefono,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    ),
-  );
-
+        appBar: AppBar(
+          actions: [editButton(), deleteButton()],
+          // actions: [deleteButton()],
+        ),
+        body: isLoading
+            ? Center(child: CircularProgressIndicator())
+            : Container(
+                height: 250,
+                padding: EdgeInsets.all(12),
+                child: Card(
+                  semanticContainer: true,
+                  color: Colors.blue[800],
+                  child: ListView(
+                    padding: EdgeInsets.all(10),
+                    children: [
+                      Text(
+                        "${contacts.nombre} ${contacts.apellido}",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.people, color: Colors.white),
+                          SizedBox(width: 8),
+                          Text(
+                            contacts.parentesco,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.house, color: Colors.white),
+                          SizedBox(width: 8),
+                          Text(
+                            contacts.direccion,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.mail, color: Colors.white),
+                          SizedBox(width: 8),
+                          Text(
+                            contacts.correo,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 8),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.phone, color: Colors.white),
+                          SizedBox(width: 8),
+                          Text(
+                            contacts.telefono,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+      );
 
   Widget editButton() => IconButton(
       icon: Icon(Icons.edit_outlined),
@@ -111,10 +144,10 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
       });
 
   Widget deleteButton() => IconButton(
-    icon: Icon(Icons.delete),
-    onPressed: () async {
-      await ContactsDatabase.instance.delete(widget.noteId);
-      Navigator.of(context).pop();
-    },
-  );
+        icon: Icon(Icons.delete),
+        onPressed: () async {
+          await ContactsDatabase.instance.delete(widget.noteId);
+          Navigator.of(context).pop();
+        },
+      );
 }

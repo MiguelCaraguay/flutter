@@ -19,12 +19,24 @@ class ContactCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+        padding:EdgeInsets.all(10),
+        alignment: Alignment.center,
         color: _lightColors[index % _lightColors.length],
         child: ListTile(
-          leading: Icon(Icons.person, size: 20),
-          title: Text(contact.nombre + " " + contact.apellido),
+          leading: Icon(
+            Icons.person,
+            size: 40,
+            color: Colors.white,
+          ),
+          title: Text(
+            contact.nombre + " " + contact.apellido,
+            style: TextStyle(color: Colors.white),
+          ),
           subtitle: Text(
-              "Telefono: " + contact.telefono + "  email: " + contact.correo),
+              "Parentesco: ${contact.parentesco}\nTelefono: ${contact
+                  .telefono}\nEmail: ${contact.correo}\nDireccion: ${contact
+                  .direccion}",
+              style: TextStyle(color: Colors.white)),
         ));
   }
 }
