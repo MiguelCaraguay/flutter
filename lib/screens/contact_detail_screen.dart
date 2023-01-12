@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:grupal/screens/edit_contact_screen.dart';
 import 'package:intl/intl.dart';
 
 import '../db/contacts_database.dart';
@@ -31,7 +32,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
   Future refreshNote() async {
     setState(() => isLoading = true);
 
-    this.contacts = await ContactsDatabase.instance.readNote(widget.noteId);
+    this.contacts = await ContactsDatabase.instance.readContact(widget.noteId);
 
     setState(() => isLoading = false);
   }
@@ -39,8 +40,8 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
   @override
   Widget build(BuildContext context) => Scaffold(
     appBar: AppBar(
-      // actions: [editButton(), deleteButton()],
-      actions: [deleteButton()],
+      actions: [editButton(), deleteButton()],
+      // actions: [deleteButton()],
     ),
     body: isLoading
         ? Center(child: CircularProgressIndicator())
@@ -52,7 +53,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
           Text(
             contacts.nombre,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
@@ -61,7 +62,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
           Text(
             contacts.apellido,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
@@ -69,7 +70,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
           Text(
             contacts.parentesco,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
@@ -78,7 +79,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
           Text(
             contacts.correo,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
@@ -86,38 +87,33 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
           Text(
             contacts.telefono,
             style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
-          ),
-          Text(
-            DateFormat.yMMMd().format(contacts.createdTime),
-            style: TextStyle(color: Colors.white38),
           ),
         ],
       ),
     ),
   );
 
-  //
-  // Widget editButton() => IconButton(
-  //     icon: Icon(Icons.edit_outlined),
-  //     onPressed: () async {
-  //       if (isLoading) return;
-  //
-  //       await Navigator.of(context).push(MaterialPageRoute(
-  //         builder: (context) => AddEditNotePage(note: contacts),
-  //       ));
-  //
-  //       refreshNote();
-  //     });
+
+  Widget editButton() => IconButton(
+      icon: Icon(Icons.edit_outlined),
+      onPressed: () async {
+        if (isLoading) return;
+
+        await Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => AddEditContactPage(contact: contacts),
+        ));
+
+        refreshNote();
+      });
 
   Widget deleteButton() => IconButton(
     icon: Icon(Icons.delete),
     onPressed: () async {
       await ContactsDatabase.instance.delete(widget.noteId);
-
       Navigator.of(context).pop();
     },
   );

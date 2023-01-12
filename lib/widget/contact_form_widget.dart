@@ -4,13 +4,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 
 class ContactFormWidget extends StatelessWidget {
-  final int? number;
   final String? nombre;
   final String? apellido;
   final String? parentesco;
   final String? correo;
   final String? telefono;
-  final ValueChanged<int> onChangedNumber;
   final ValueChanged<String> onChangedNombre;
   final ValueChanged<String> onChangedApellido;
   final ValueChanged<String> onChangedParentesco;
@@ -19,13 +17,12 @@ class ContactFormWidget extends StatelessWidget {
 
   const ContactFormWidget({
     Key? key,
-    this.number = 0,
     this.nombre = '',
     this.apellido = '',
     this.parentesco = '',
     this.correo = '',
     this.telefono = '',
-    required this.onChangedNumber,
+
     required this.onChangedNombre,
     required this.onChangedApellido,
     required this.onChangedParentesco,
@@ -34,128 +31,91 @@ class ContactFormWidget extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) =>
-      SingleChildScrollView(
+  Widget build(BuildContext context) => SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.all(20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Slider(
-                      value: (number ?? 0).toDouble(),
-                      min: 0,
-                      max: 5,
-                      divisions: 5,
-                      onChanged: (number) => onChangedNumber(number.toInt()),
-                    ),
-                  )
-                ],
-              ),
               buildName(),
               SizedBox(height: 3),
-              buildLastName(),
-              SizedBox(height: 8),
-              buildParent(),
-              SizedBox(height: 8),
-              buildMail(),
-              SizedBox(height: 16),
-              buildPhone(),
-              SizedBox(height: 8),
+              buildApellido(),
+              SizedBox(height: 3),
+              buildParentesco(),
+              SizedBox(height: 3),
+              buildCorreo(),
+              SizedBox(height: 3),
+              buildTelefono(),
+              SizedBox(height: 3),
             ],
           ),
         ),
       );
 
-  Widget buildName() =>
-      TextFormField(
+  Widget buildName() => TextFormField(
         maxLines: 1,
         initialValue: nombre,
-        style: TextStyle(
-          color: Colors.white70,
-          fontWeight: FontWeight.bold,
-          fontSize: 24,
-        ),
         decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: 'Nombre',
-          hintStyle: TextStyle(color: Colors.white70),
+          icon: Icon(Icons.person),
+          hintText: 'Nombres',
+          hintStyle: TextStyle(color: Colors.black),
         ),
-        validator: (title) =>
-        title != null && title.isEmpty
+        validator: (title) => title != null && title.isEmpty
             ? 'El nombre no debe estar vacio'
             : null,
         onChanged: onChangedNombre,
       );
 
-  Widget buildLastName() =>
-      TextFormField(
-        maxLines: 5,
+  Widget buildApellido() => TextFormField(
+        maxLines: 1,
         initialValue: apellido,
-        style: TextStyle(color: Colors.white60, fontSize: 18),
         decoration: InputDecoration(
-          border: InputBorder.none,
-          hintText: 'Apellido',
-          hintStyle: TextStyle(color: Colors.white60),
+          icon: Icon(Icons.person),
+          hintText: 'Apellidos',
+          hintStyle: TextStyle(color: Colors.black),
         ),
-        validator: (title) =>
-        title != null && title.isEmpty
+        validator: (title) => title != null && title.isEmpty
             ? 'El Apellido no puede estar vacío'
             : null,
         onChanged: onChangedApellido,
       );
 
-  Widget buildParent() =>
-      TextFormField(
-        maxLines: 5,
+  Widget buildParentesco() => TextFormField(
         initialValue: parentesco,
-        style: TextStyle(color: Colors.white60, fontSize: 18),
         decoration: InputDecoration(
-          border: InputBorder.none,
+          icon: Icon(Icons.people),
           hintText: 'Parentesco',
-          hintStyle: TextStyle(color: Colors.white60),
+          hintStyle: TextStyle(color: Colors.black),
         ),
-        validator: (title) =>
-        title != null && title.isEmpty
+        validator: (title) => title != null && title.isEmpty
             ? 'El parentesco no puede estar vacío'
             : null,
         onChanged: onChangedParentesco,
       );
 
-  Widget buildMail() =>
-      TextFormField(
-        maxLines: 5,
+  Widget buildCorreo() => TextFormField(
         initialValue: correo,
-        style: TextStyle(color: Colors.white60, fontSize: 18),
         decoration: InputDecoration(
-          border: InputBorder.none,
+          icon: Icon(Icons.mail),
           hintText: 'Correo',
-          hintStyle: TextStyle(color: Colors.white60),
+          hintStyle: TextStyle(color: Colors.black),
         ),
-        validator: (title) =>
-        title != null && title.isEmpty
+        validator: (title) => title != null && title.isEmpty
             ? 'El correo no puede estar vacío'
             : null,
         onChanged: onChangedCorreo,
       );
 
-  Widget buildPhone() =>
-      TextFormField(
-        maxLines: 5,
-        initialValue: correo,
-        style: TextStyle(color: Colors.white60, fontSize: 18),
+  Widget buildTelefono() => TextFormField(
+        initialValue: telefono,
         decoration: InputDecoration(
-          border: InputBorder.none,
+          icon: Icon(Icons.phone),
           hintText: 'Telefono',
-          hintStyle: TextStyle(color: Colors.white60),
+          hintStyle: TextStyle(color: Colors.black),
         ),
-        validator: (title) =>
-        title != null && title.isEmpty
+        validator: (title) => title != null && title.isEmpty
             ? 'El telefono no puede estar vacío'
             : null,
         onChanged: onChangedTelefono,
       );
-
 }

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../db/contacts_database.dart';
 import '../model/contact.dart';
 import '../widget/contact_form_widget.dart';
-//import 'package:trabajo_grupal_flutter/widget/note_form_widget.dart';
 
 class AddEditContactPage extends StatefulWidget {
   final Contact? contact;
@@ -12,14 +11,12 @@ class AddEditContactPage extends StatefulWidget {
     Key? key,
     this.contact,
   }) : super(key: key);
-
   @override
   _AddEditContactPageState createState() => _AddEditContactPageState();
 }
 
 class _AddEditContactPageState extends State<AddEditContactPage> {
   final _formKey = GlobalKey<FormState>();
-  late int number;
   late String nombre;
   late String apellido;
   late String parentesco;
@@ -30,53 +27,58 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
   void initState() {
     super.initState();
 
-    number = widget.contact?.number ?? 0;
-    nombre = widget.contact?.nombre ?? '';
-    apellido = widget.contact?.apellido ?? '';
-    parentesco = widget.contact?.parentesco ?? '';
-    correo = widget.contact?.correo ?? '';
-    telefono = widget.contact?.telefono ?? '';
+    nombre = widget.contact?.nombre ?? 'M';
+    apellido = widget.contact?.apellido ?? 'A';
+    parentesco = widget.contact?.parentesco ?? 'P';
+    correo = widget.contact?.correo ?? 'C';
+    telefono = widget.contact?.telefono ?? 'T';
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          actions: [buildButton()],
-        ),
-        body: Form(
-          key: _formKey,
-          child: ContactFormWidget(
-            number: number,
-            nombre: nombre,
-            apellido: apellido,
-            parentesco: parentesco,
-            correo: correo,
-            telefono: telefono,
-            onChangedNumber: (number) => setState(() => this.number = number),
-            onChangedNombre: (nombre) => setState(() => this.nombre = nombre),
-            onChangedApellido: (apellido) =>
-                setState(() => this.apellido = apellido),
-            onChangedParentesco: (parentesco) =>
-                setState(() => this.correo = parentesco),
-            onChangedCorreo: (correo) => setState(() => this.correo = correo),
-            onChangedTelefono: (telefono) =>
-                setState(() => this.telefono = correo),
+      appBar: AppBar(
+        title: Text("Formulario"),
+      ),
+      body: Column(
+        children: [
+          Form(
+            key: _formKey,
+            child: ContactFormWidget(
+              nombre: nombre,
+              apellido: apellido,
+              parentesco: parentesco,
+              correo: correo,
+              telefono: telefono,
+              onChangedNombre: (nombre) => setState(() => this.nombre = nombre),
+              onChangedApellido: (apellido) =>
+                  setState(() => this.apellido = apellido),
+              onChangedParentesco: (parentesco) =>
+                  setState(() => this.correo = parentesco),
+              onChangedCorreo: (correo) => setState(() => this.correo = correo),
+              onChangedTelefono: (telefono) =>
+                  setState(() => this.telefono = telefono),
+            ),
           ),
-        ),
-      );
+          buildButton()
+        ],
+      ));
 
   Widget buildButton() {
-    final isFormValid = nombre.isNotEmpty && apellido.isNotEmpty;
-
+    final isFormValid = nombre.isNotEmpty &&
+        apellido.isNotEmpty &&
+        parentesco.isNotEmpty &&
+        correo.isNotEmpty &&
+        telefono.isNotEmpty;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          onPrimary: Colors.white,
-          primary: isFormValid ? null : Colors.grey.shade700,
+          onPrimary: Colors.blue[1000],
+          primary: isFormValid ? null : Colors.blue[700],
         ),
         onPressed: addOrUpdateNote,
-        child: Text('Guardar'),
+        child: Text('Guardar Personal',
+            style: TextStyle(color: Colors.white, fontSize: 14)),
       ),
     );
   }
@@ -86,35 +88,40 @@ class _AddEditContactPageState extends State<AddEditContactPage> {
 
     if (isValid) {
       final isUpdating = widget.contact != null;
-
+      print('valido');
       if (isUpdating) {
-        await updateNote();
+        await updateContact();
       } else {
-        await addNote();
+        await addContact();
       }
 
       Navigator.of(context).pop();
     }
   }
 
-  Future updateNote() async {
-    final note = widget.contact!
-        .copy(number: number, nombre: nombre, apellido: apellido);
-
-    await ContactsDatabase.instance.update(note);
-  }
-
-  Future addNote() async {
-    final note = Contact(
-      number: number,
+  Future updateContact() async {
+    final contact = widget.contact!.copy(
       nombre: nombre,
       apellido: apellido,
       parentesco: parentesco,
       correo: correo,
       telefono: telefono,
-      createdTime: DateTime.now(),
     );
+    await ContactsDatabase.instance.update(contact);
+  }
 
-    await ContactsDatabase.instance.create(note);
+  Future addContact() async {
+    final contact = Contact(
+      nombre: nombre,
+      apellido: apellido,
+      parentesco: parentesco,
+      correo: correo,
+      telefono: telefono,
+    );
+    print(contact.telefono);
+    print(contact.nombre);
+    print(contact.apellido);
+    print(contact.parentesco);
+    await ContactsDatabase.instance.create(contact);
   }
 }

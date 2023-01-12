@@ -33,7 +33,7 @@ class _NotesPageState extends State<NotesPage> {
   Future refreshNotes() async {
     setState(() => isLoading = true);
 
-    this.contacts = await ContactsDatabase.instance.readAllNotes();
+    this.contacts = await ContactsDatabase.instance.readAllContacts();
 
     setState(() => isLoading = false);
   }
@@ -42,50 +42,44 @@ class _NotesPageState extends State<NotesPage> {
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
           title: Text(
-            'Notas',
+            'Contactos',
             style: TextStyle(fontSize: 24),
           ),
-          actions: [Icon(Icons.search), SizedBox(width: 12)],
         ),
         body: Center(
           child: isLoading
               ? CircularProgressIndicator()
               : contacts.isEmpty
                   ? Text(
-                      'No hay ',
-                      style: TextStyle(color: Colors.white, fontSize: 24),
+                      'No existen Contactos',
+                      style: TextStyle(color: Colors.black, fontSize: 24),
                     )
-                  : buildNotes(),
+                  : buildContacts(),
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.blue,
           child: Icon(Icons.add),
           onPressed: () async {
             await Navigator.of(context).push(
               MaterialPageRoute(builder: (context) => AddEditContactPage()),
             );
-
             refreshNotes();
           },
         ),
       );
 
-  Widget buildNotes() => StaggeredGridView.countBuilder(
-        padding: EdgeInsets.all(8),
+  Widget buildContacts() => StaggeredGridView.countBuilder(
         itemCount: contacts.length,
         staggeredTileBuilder: (index) => StaggeredTile.fit(1),
-        crossAxisCount: 4,
-        mainAxisSpacing: 4,
-        crossAxisSpacing: 4,
+        crossAxisCount: 1,
         itemBuilder: (context, index) {
           final contact = contacts[index];
-
           return GestureDetector(
             onTap: () async {
               await Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => ContactDetailPage(noteId: contact.id!),
               ));
-
               refreshNotes();
             },
             child: ContactCardWidget(contact: contact, index: index),

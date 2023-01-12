@@ -1,9 +1,9 @@
-final String tableNotes = 'contactos';
+final String tableContactos = 'contactos';
 
-class NoteFields {
+class ContactFields {
   static final List<String> values = [
     /// Add all fields
-    id,  nombre, apellido, parentesco, time, correo, telefono
+    id,  nombre, apellido, parentesco, correo, telefono
   ];
 
   static final String id = '_id';
@@ -12,72 +12,59 @@ class NoteFields {
   static final String apellido = 'apellido';
   static final String parentesco = 'parentesco';
   static final String correo = 'correo';
-  static final String telefono = 'celular';
-  static final String time = 'time';
+  static final String telefono = 'telefono';
 }
 
 class Contact {
   final int? id;
-  final int number;
   final String nombre;
   final String apellido;
   final String parentesco;
   final String correo;
   final String telefono;
-  final DateTime createdTime;
 
   const Contact({
     this.id,
 
-    required this.number,
     required this.nombre,
     required this.apellido,
     required this.parentesco,
     required this.correo,
     required this.telefono,
-    required this.createdTime,
   });
 
   Contact copy(
       {int? id,
-        bool? isImportant,
-        int? number,
         String? nombre,
         String? apellido,
         String? parentesco,
         String? correo,
-        String? celular,
+        String? telefono,
         DateTime? createdTime}) =>
       Contact(
         id: id ?? this.id,
-        number: number ?? this.number,
         nombre: nombre ?? this.nombre,
         apellido: apellido ?? this.apellido,
         parentesco: parentesco ?? this.parentesco,
         correo: parentesco ?? this.correo,
         telefono: parentesco ?? this.telefono,
-        createdTime: createdTime ?? this.createdTime,
       );
 
   static Contact fromJson(Map<String, Object?> json) => Contact(
-    id: json[NoteFields.id] as int?,
-    number: json[NoteFields.number] as int,
-    nombre: json[NoteFields.nombre] as String,
-    apellido: json[NoteFields.apellido] as String,
-    createdTime: DateTime.parse(json[NoteFields.time] as String),
-    parentesco: json[NoteFields.parentesco] as String,
-    correo: json[NoteFields.correo] as String,
-    telefono: json[NoteFields.telefono] as String? ?? " ",
+    id: json[ContactFields.id] as int?,
+    nombre: json[ContactFields.nombre] as String,
+    apellido: json[ContactFields.apellido] as String,
+    parentesco: json[ContactFields.parentesco] as String,
+    correo: json[ContactFields.correo] as String,
+    telefono: json[ContactFields.telefono] as String? ?? " ",
   );
 
   Map<String, Object?> toJson() => {
-    NoteFields.id: id,
-    NoteFields.nombre: nombre,
-    NoteFields.number: number,
-    NoteFields.apellido: apellido,
-    NoteFields.parentesco: parentesco,
-    NoteFields.correo: correo,
-    NoteFields.telefono: telefono,
-    NoteFields.time: createdTime.toIso8601String(),
+    ContactFields.id: id,
+    ContactFields.nombre: nombre,
+    ContactFields.apellido: apellido,
+    ContactFields.parentesco: parentesco,
+    ContactFields.correo: correo,
+    ContactFields.telefono: telefono,
   };
 }

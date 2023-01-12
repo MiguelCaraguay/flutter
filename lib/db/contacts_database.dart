@@ -27,37 +27,33 @@ class ContactsDatabase {
   Future _createDB(Database db, int version) async {
     final idType = 'INTEGER PRIMARY KEY AUTOINCREMENT';
     final textType = 'TEXT NOT NULL';
-    final boolType = 'BOOLEAN NOT NULL';
-    final integerType = 'INTEGER NOT NULL';
 
     await db.execute('''
-    CREATE TABLE $tableNotes ( 
-      ${NoteFields.id} $idType, 
-      ${NoteFields.number} $integerType,
-      ${NoteFields.nombre} $textType,
-      ${NoteFields.apellido} $textType,
-      ${NoteFields.parentesco} $textType,
-      ${NoteFields.correo} $textType ,
-      ${NoteFields.time} $textType
-      ${NoteFields.telefono} $textType
+    CREATE TABLE $tableContactos (
+      ${ContactFields.id} $idType, 
+      ${ContactFields.nombre} $textType,
+      ${ContactFields.apellido} $textType,
+      ${ContactFields.parentesco} $textType,
+      ${ContactFields.correo} $textType,
+      ${ContactFields.telefono} $textType
       )
     ''');
   }
 
-  Future<Contact> create(Contact note) async {
+  Future<Contact> create(Contact contactos) async {
     final db = await instance.database;
 
-    final id = await db.insert(tableNotes, note.toJson());
-    return note.copy(id: id);
+    final id = await db.insert(tableContactos, contactos.toJson());
+    return contactos.copy(id: id);
   }
 
-  Future<Contact> readNote(int id) async {
+  Future<Contact> readContact(int id) async {
     final db = await instance.database;
 
     final maps = await db.query(
-      tableNotes,
-      columns: NoteFields.values,
-      where: '${NoteFields.id} = ?',
+      tableContactos,
+      columns: ContactFields.values,
+      where: '${ContactFields.id} = ?',
       whereArgs: [id],
     );
 
@@ -68,24 +64,24 @@ class ContactsDatabase {
     }
   }
 
-  Future<List<Contact>> readAllNotes() async {
+  Future<List<Contact>> readAllContacts() async {
     final db = await instance.database;
 
-    final orderBy = '${NoteFields.time} ASC';
+    final orderBy = '${ContactFields.id} ASC';
 
-    final result = await db.query(tableNotes, orderBy: orderBy);
+    final result = await db.query(tableContactos, orderBy: orderBy);
 
     return result.map((json) => Contact.fromJson(json)).toList();
   }
 
-  Future<int> update(Contact note) async {
+  Future<int> update(Contact contactos) async {
     final db = await instance.database;
 
     return db.update(
-      tableNotes,
-      note.toJson(),
-      where: '${NoteFields.id} = ?',
-      whereArgs: [note.id],
+      tableContactos,
+      contactos.toJson(),
+      where: '${ContactFields.id} = ?',
+      whereArgs: [contactos.id],
     );
   }
 
@@ -93,8 +89,8 @@ class ContactsDatabase {
     final db = await instance.database;
 
     return await db.delete(
-      tableNotes,
-      where: '${NoteFields.id} = ?',
+      tableContactos,
+      where: '${ContactFields.id} = ?',
       whereArgs: [id],
     );
   }
@@ -105,4 +101,3 @@ class ContactsDatabase {
     db.close();
   }
 }
-
